@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        /* Additional styles for alignment and animation */
+        .form-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input[type="password"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px; /* Space for the eye icon */
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 10px;
+            top: 65%; /* Adjusted to move the icon further down */
+            transform: translateY(-50%);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            z-index: 10; /* Ensure the icon appears above the input field */
+        }
+
+        .eye-icon:hover {
+            transform: translateY(-50%) scale(1.2);
+        }
+
+        .eye-icon img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault(); 
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                const response = await fetch("/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    window.location.href = `/load?name=${encodeURIComponent(result.name)}&bus=${encodeURIComponent(result.bus)}`;
+                } else {
+                    alert("Incorrect username or password!");
+                }
+            } catch (error) {
+                alert("An error occurred. Please try again.");
+                console.error("Error:", error);
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById("password");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.src = "/static/eye-open.png"; // Replace with the open-eye icon path
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.src = "/static/eye-closed.png"; // Replace with the closed-eye icon path
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Login</h1>
+        <img src="/static/logo.png" alt="Bus Tracker Logo" class="logo">
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div class="eye-icon" onclick="togglePasswordVisibility()">
+                    <img id="eyeIcon" src="/static/eye-closed.png" alt="Toggle Password Visibility">
+                </div>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

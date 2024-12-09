@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script>
+        function handleLoadPage() {
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get("name");
+            const bus = urlParams.get("bus");
+
+            document.getElementById("welcomeMessage").textContent = `Welcome, ${name}`;
+            document.getElementById("busInfo").textContent = `Bus: ${bus}`;
+
+            fetch(`/api/getUserProfile?name=${name}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    
+                    console.log("Fetched data:", data);
+                    
+                    setTimeout(function() {
+                        window.location.href = `/profile?name=${name}`; 
+                    }, 4000);  // delay section
+                })
+                .catch(error => {
+                    console.error("Error fetching user data:", error);
+                    alert("An error occurred while fetching user data. Please try again later.");
+                });
+        }
+
+        window.onload = handleLoadPage;
+    </script>
+</head>
+<body>
+    <div class="loading-background">
+        <div class="loading-container">
+            <img src="/static/loading.gif" alt="Loading..." class="loading-gif">
+            <h1 id="welcomeMessage">Welcome, User!</h1>
+            <h2 id="busInfo">Bus: Bus Name</h2>
+        </div>
+    </div>
+</body>
+</html>

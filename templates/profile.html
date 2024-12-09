@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIET Bus & Transportation Application</title>
+    
+    <link rel="stylesheet" href="/static/styles2.css">
+    <script>
+        function fetchUserProfile() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get("name");
+
+            // Checking if data exists in Storage
+            const savedProfile = localStorage.getItem("userProfile");
+
+            if (savedProfile) {
+                // Loading data from Storage
+                const data = JSON.parse(savedProfile);
+                updateProfileUI(data);
+            } else if (name) {
+                // Fetching data from the server if not in Storage
+                fetch(`/api/getUserProfile?name=${name}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert("User not found.");
+                        } else {
+                            // Saving data to Storage
+                            localStorage.setItem("userProfile", JSON.stringify(data));
+                            updateProfileUI(data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching user profile data:", error);
+                        alert("Failed to load user data. Please try again later.");
+                    });
+            } else {
+                alert("No name provided in the URL.");
+            }
+        }
+
+        function updateProfileUI(data) {
+            document.getElementById("name").textContent = data.Name;
+            document.getElementById("bus").textContent = data.BusName;
+            document.getElementById("course").textContent = data.Course;
+            document.getElementById("section").textContent = data.Section;
+            document.getElementById("email").textContent = data.Email;
+            document.getElementById("route").textContent = data.Route;
+            document.getElementById("pickupPoint").textContent = data.PickupPoint;
+            document.getElementById("contact").textContent = data.Contact;
+            document.getElementById("emergencyContact").textContent = data.EmergencyContact;
+            document.getElementById("bloodGroup").textContent = data.BloodGroup;
+        }
+
+        window.onload = fetchUserProfile;
+    </script>
+</head>
+<body>
+    <header>
+        <img src="/static/logo.png" alt="MIET Logo">
+        <h1>MIET Bus & Transportation Application</h1>
+    </header>
+
+    <div class="sidebar">
+        <a href="/profile" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/profile.png" alt="Profile Icon" class="icon">
+            </div>
+            <span class="label">Profile</span>
+        </a>
+
+        <a href="/tracking" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/Bus.png" alt="Bus Icon" class="icon">
+            </div>
+            <span class="label">Bus Tracking</span>
+        </a>
+
+        <a href="/notification" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/notification.png" alt="Notification Icon" class="icon">
+            </div>
+            <span class="label">Notifications</span>
+        </a>
+    </div>
+
+    <div class="content">
+        <div id="profile" class="profile" style="display: flex; align-items: center; max-width: 800px; margin: 40px auto;">
+            <div style="flex: 1; text-align: center;">
+                <img src="/static/user-photo.png" alt="User Photo" style="border-radius: 50%; height: 150px; width: 150px;">
+            </div>
+            <div style="flex: 2; padding-left: 20px;">
+                <table class="table" style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Name:</td>
+                        <td style="padding: 8px;" id="name">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Bus Name:</td>
+                        <td style="padding: 8px;" id="bus">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Course:</td>
+                        <td style="padding: 8px;" id="course">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Section:</td>
+                        <td style="padding: 8px;" id="section">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Email:</td>
+                        <td style="padding: 8px;" id="email">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Route:</td>
+                        <td style="padding: 8px;" id="route">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Pickup Point:</td>
+                        <td style="padding: 8px;" id="pickupPoint">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Contact:</td>
+                        <td style="padding: 8px;" id="contact">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Emergency Contact:</td>
+                        <td style="padding: 8px;" id="emergencyContact">Loading...</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; padding: 8px; color: #4f4f4f;">Blood Group:</td>
+                        <td style="padding: 8px;" id="bloodGroup">Loading...</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

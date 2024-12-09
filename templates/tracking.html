@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIET Bus & Transportation Application</title>
+    
+    <link rel="stylesheet" href="/static/styles2.css">
+</head>
+<body>
+    <header>
+        <img src="/static/logo.png" alt="MIET Logo">
+        <h1>MIET Bus & Transportation Application</h1>
+    </header>
+
+
+    <div class="sidebar">
+
+        <a href="/profile" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/profile.png" alt="Profile Icon" class="icon">
+            </div>
+            <span class="label">Profile</span>
+        </a>
+
+   
+        <a href="/tracking" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/Bus.png" alt="Bus Icon" class="icon">
+            </div>
+            <span class="label">Bus Tracking</span>
+        </a>
+
+       
+        <a href="/notification" class="sidebar-item">
+            <div class="icon-tile">
+                <img src="/static/notification.png" alt="Notification Icon" class="icon">
+            </div>
+            <span class="label">Notifications</span>
+        </a>
+    </div>
+
+   
+    <div class="content">
+       
+        <div id="live-bus-tracking" style="text-align: center; max-width: 800px; margin: 40px auto;">
+            <h2>Live Bus Tracking</h2>
+            <p>Track your bus in real-time on the map below:</p>
+    
+            <div id="map" style="height: 500px; width: 100%; border: 1px solid #ccc;">
+                <p style="line-height: 500px; font-size: 18px; color: #666;">Loading map...</p>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 34.0837, lng: 74.7973 },
+            zoom: 13
+        });
+
+        // Add a point
+        const busMarker = new google.maps.Marker({
+            position: { lat: 34.0837, lng: 74.7973 },
+            map: map,
+            title: "Bus is here"
+        });
+
+        // it update the point position every 5 seconds
+        setInterval(() => {
+            const lat = 34.0837 + (Math.random() - 0.5) * 0.01;
+            const lng = 74.7973 + (Math.random() - 0.5) * 0.01;
+            const newPosition = { lat: lat, lng: lng };
+            busMarker.setPosition(newPosition);
+            map.panTo(newPosition);
+        }, 5000);
+    });
+</script>
+
+    // note have to include 
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY">// note have to include google cloud console api key{Google Maps JavaScript API}</script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-sA+ePIoH9fQ4Ai1dd8iSfkhZo9iEEB7lLuJUnuDz+7c=" crossorigin=""/>
+</body>
+</html>
